@@ -1,0 +1,205 @@
+* {
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	font-family: 'Bender';
+	cursor: url('../assets/cursor.png'), auto;
+	box-sizing: border-box;
+	user-select: none;
+}
+
+body {
+
+	background-color: #010100;
+	color: #C6C4B2;
+	padding: 10px;
+
+	h1 {
+		display: block;
+		text-align: center;
+		margin-top: 25px;
+		margin-bottom: 50px;
+	}
+
+	.error-box {
+		background-color: #010100;
+		border: 2px solid #585D60;
+		padding: 2px;
+		display: block;
+		width: 610px;
+		margin: 0 auto 50px auto;
+		display: none;
+
+		.header {
+			background-color: #191B1B;
+			color: #E8E8E8;
+			display: block;
+			text-transform: none;
+			padding-left: 8px;
+			padding-bottom: 2px;
+		}
+
+		.content {
+			padding: 25px 0;
+			text-align: center;
+			font-size: 16px;
+		}
+
+		#close-error-box {
+			text-align: center;
+			font-size: 24px;
+			width: 80px;
+			margin: 0 auto 25px auto;
+
+			&:hover {
+				background-image: url(../assets/button.png);
+				background-size: cover;
+				background-origin: border-box;
+				animation: fadeInLeft 0.4s;
+				color: black;
+				text-shadow: grey 1px 1px 2px;
+				transition: color 0.15s linear;
+				transition: 'text-shadow' 0.15s linear;
+			}
+		}
+	}
+
+	#result {
+		text-align: center;
+		font-size: 24px;
+
+		span.fee {
+			color: #E3F1F8;
+			margin-left: 16px;
+		}
+	}
+
+	#max-profit {
+		text-align: center;
+		font-size: 24px;
+		margin-top: 16px;
+
+		span.fee {
+			color: #E3F1F8;
+			margin-left: 16px;
+		}
+	}
+
+	#max-profit-multi {
+		text-align: center;
+		font-size: 24px;
+
+		span.fee {
+			color: #E3F1F8;
+			margin-left: 16px;
+		}
+	}
+
+	#profit {
+		text-align: center;
+		font-size: 24px;
+
+		span.fee {
+			color: #E3F1F8;
+			margin-left: 16px;
+		}
+	}
+	
+	.line {
+		display: block;
+		margin: 0 auto 25px auto;
+		width: 60%;
+		font-size: 16px;
+
+		.description {
+			display: block;
+			color: #C6C4B2;
+			font-size: 13px;
+			margin-bottom: 4px;
+
+			#trader-name {
+				font-weight: 600;
+			}
+		}
+
+		.input-border {
+			margin-top: 2px;
+			padding: 8px;
+			background-color: #1A1B1B;
+
+			select {
+				background-color: #010100;
+				color: #C6C4B2;
+				padding: 5px;
+				font-size: 16px;
+				user-select: auto;
+
+				option {
+					background-color: #191917;
+					padding: 4px;
+					color: #C7C5B3;
+					font-size: 16px;
+					user-select: text;
+
+					&:hover {
+						color: #CBC8B4;
+						background-color: #42413E;
+					}
+				}
+			}
+
+			input {
+				background-color: #010100;
+				color: #C6C4B2;
+				padding: 4px;
+				font-size: 16px;
+				user-select: text;
+			}
+		}
+
+		.button-house {
+			display: block;
+			width: 100%;
+
+			&:hover {
+				background: url(../assets/button.png) no-repeat center;
+				animation: fadeInLeft 0.4s;
+			}
+
+			button {
+				display: block;
+				background-color: transparent;
+				color: #C6C4B2;
+				padding: 8px;
+				font-size: 24px;
+				border: none;
+				margin: auto;
+				text-shadow: transparent 0 0 0;
+				user-select: text;
+
+				&:hover {
+					color: black;
+					text-shadow: grey 1px 1px 2px;
+					transition: color 0.15s linear;
+					transition: 'text-shadow' 0.15s linear;
+				}
+			}
+		}
+	}
+}
+
+@font-face {
+	font-family: Bender;
+	src: url(../assets/bender.otf) format("opentype");
+}
+
+@keyframes fadeInLeft {
+	0% {
+	   opacity: 0;
+	   transform: translateX(-20px);
+	}
+	100% {
+	   opacity: 1;
+	   transform: translateX(0);
+	}
+ }  

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Escape from Tarkov - Profit Maximiser</title>
+		<script src="script/jquery.min.js"></script>
+		<script src="script/index.js"></script>
+		<link rel="stylesheet" href="style/style.css">
+	</head>
+	<body>
+		<div>
+			<h1>Escape from Tarkov - Profit Maximiser</h1>
+		</div>
+		<div class="error-box">
+			<div class="header">
+				Error: 0001
+			</div>
+			<div class="content">
+				Please enter "sell price", "requirements" and "quantity"<br />
+			</div>
+			<div id="close-error-box">OK</div>
+		</div>
+		<div>
+			<div class="line">
+				<b>Trader</b>
+				<span class="description">Which trader are you selling to?</span>
+				<div class="input-border">
+					<select id="trader">
+						<option coef="0.5">Prapor</option>
+						<option coef="0.63">Therapist</option>
+						<option coef="0.4">Fence</option>
+						<option coef="0.49">Skier</option>
+						<option coef="0.495">Peacekeeper</option>
+						<option coef="0.56">Mechanic</option>
+						<option coef="0.62">Ragman</option>
+						<option coef="0.6">Jaeger</option>
+					</select>
+				</div>
+			</div>
+			<div class="line">
+				<b>Sell price</b>
+				<span class="description">How much does your item sell to <span id="trader-name">Prapor</span> for?</span>
+				<div class="input-border">
+					<input type="number" id='base-price' placeholder="5000" />
+				</div>
+			</div>
+			<div class="line">
+				<b>Requirements</b>
+				<span class="description">How much do you want to sell your item on the flea market for?<br /><span style="color: darkorange">Note: For "calculate max profit", this is the maximum you will sell the item for</span></span>
+				<div class="input-border">
+					<input type="number" id="asking-amount" placeholder="17500" />
+				</div>
+			</div>
+			<div class="line">
+				<b>Quantity</b>
+				<span class="description">How many items are you selling in one listing?</span>
+				<div class="input-border">
+					<input type="number" id="flea-quantity" placeholder="1" />
+				</div>
+			</div>
+			<div class="line">
+				<b>Intel Center level</b>
+				<span class="description">What level is your Intelligence Center?</span>
+				<div class="input-border">
+					<input type="number" id="intel-center" placeholder="0" />
+				</div>
+			</div>
+			<div class="line">
+				<b>Hideout Management skill</b>
+				<span class="description">What is your Hideout Management skill level?</span>
+				<div class="input-border">
+					<input type="number" id="hideout-mgmt" placeholder="0" />
+				</div>
+			</div>
+			<div class="line">
+				<div class="button-house">
+					<button id="calculate">Calculate Fee</button>
+				</div>
+				<div class="button-house">
+					<button id="calculate-max">Calculate Max Profit</button>
+				</div>
+			</div>
+			<div id="result"></div>
+			<div id="profit"></div>
+			<div id="max-profit"></div>
+			<div id="max-profit-multi"></div>
+		</div>
+	</body>
+	<script>
+		(() => {
+			$('#calculate').on('click', e => {
+				calculate(false);
+			});
+			$('#calculate-max').on('click', e => {
+				calculate(true);
+			});
+			$('select').change(e => {
+				$('#trader-name').replaceWith(`<span id="trader-name">${$('option:selected').text()}</span>`);
+			});
+			$('#close-error-box').on('click', e => {
+				showError(false, true);
+			});
+		})();
+		async function calculate(maxProfitCalc = false) {
+			const coefficient = Number($('option:selected').attr('coef'));
+			const basePrice = Number($('#base-price').val());
+			const quantity = Number($('#flea-quantity').val());
+			const askingAmount = Number($('#asking-amount').val());
+			const hideoutManagement = Number($('#hideout-mgmt').val());
+			const intelCenter = Number($('#intel-center').val());
+			if(!maxProfitCalc) {
+
+				if(!quantity || !askingAmount || !basePrice) {
+					showError();
+					return;
+				}
+				
+				const tax = profitMaximiser.calculateTax(basePrice, askingAmount, coefficient, quantity, intelCenter, hideoutManagement);
+				$('#result').replaceWith(`<div id="result">Fee <span class="fee">${numberWithCommas(tax)} <span style="font-size: 28px;">&#8381;</span></span></div>`);
+				
+				const profit = (askingAmount * quantity) - tax;
+				$('#profit').replaceWith(`<div id="profit">Profit <span class="fee">${numberWithCommas(profit)} <span style="font-size: 28px;">&#8381;</span></span></div>`);
+			
+			} else {
+				if(!basePrice || !quantity) {
+					showError(true);
+					return;
+				}
+				const maxProfit = await new Promise((resolve) => {
+					const profit = profitMaximiser.calculateMaxProfit(basePrice, coefficient, quantity, 3, 9, askingAmount);
+					resolve(profit);
+				});
+				$('#max-profit').replaceWith(`<div id="max-profit">For max profit of <span style="color: #E3F1F8">${numberWithCommas(maxProfit[0])} <span style="font-size: 28px;">&#8381;</span></span>, sell <span style="color: #E3F1F8">${quantity}</span> at <span style="color: #E3F1F8">${numberWithCommas(maxProfit[1])} &#8381;</span> ${quantity > 1 ? 'each' : ''}</div>`);
+			}
+		}
+
+		function showError(maxProfit = false, hide = false) {
+			if(!hide) {
+				$('.error-box')[0].style.display = 'block';
+				if(maxProfit) {
+					$('.content')[0].textContent = `Please enter "sell price" and "quantity"`;
+				} else {
+					$('.content')[0].textContent = `Please enter "sell price", "requirements" and "quantity"`;
+				}
+			} else {
+				$('.error-box')[0].style.display = 'none';
+			}
+		}
+
+		function numberWithCommas(x) {
+			return Math.ceil(x).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+		}
+	</script>
+</html>
